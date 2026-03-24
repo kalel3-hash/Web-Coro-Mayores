@@ -2,32 +2,83 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Biblioteca de Audios</title>
+  <title>Coro Mayores</title>
   <style>
     body { font-family: Arial; background:#f4f6f8; padding:20px; }
     .container { max-width:800px; margin:auto; }
+    h1 { margin-bottom: 20px; }
     .audio-card {
       background:white;
       padding:15px;
       margin-bottom:15px;
       border-radius:10px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+    .audio-title {
+      margin: 0 0 8px 0;
+      font-weight: bold;
     }
     audio { width:100%; }
+    .hint {
+      background:#fff3cd;
+      border:1px solid #ffeeba;
+      padding:12px 15px;
+      border-radius:10px;
+      margin-bottom:20px;
+    }
   </style>
 </head>
 <body>
 
 <div class="container">
-  <h1>Biblioteca de Audios</h1>
-
-  <div class="audio-card">
-    <p>Audio 1</p>
-    <audio controls controlsList="nodownload" oncontextmenu="return false;">
-      <source src="audios/audio1.mp3" type="audio/mpeg">
-    </audio>
-  </div>
-
+  <h1>Coro Mayores</h1>
+  <div id="audio-list"></div>
 </div>
+
+<script>
+  const audioList = document.getElementById("audio-list");
+
+  function renderList(audioFiles) {
+    audioFiles.forEach((fileName) => {
+      const card = document.createElement("div");
+      card.className = "audio-card";
+
+      const title = document.createElement("p");
+      title.className = "audio-title";
+      title.textContent = fileName.replace(/\.mp3$/i, "");
+
+      const audio = document.createElement("audio");
+      audio.controls = true;
+
+      const source = document.createElement("source");
+      source.src = `audios/${encodeURIComponent(fileName)}`;
+      source.type = "audio/mpeg";
+
+      audio.appendChild(source);
+      card.appendChild(title);
+      card.appendChild(audio);
+      audioList.appendChild(card);
+    });
+  }
+
+  (async function loadAudios() {
+    try {
+      const res = await fetch("/api/audios");
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      if (!Array.isArray(data)) throw new Error("Respuesta inválida");
+      if (data.length === 0) {
+        audioList.innerHTML =
+          '<p class="hint">No hay archivos .mp3 en la carpeta <strong>audios</strong>.</p>';
+        return;
+      }
+      renderList(data);
+    } catch {
+      audioList.innerHTML =
+        '<p class="hint">Para ver la lista automática de audios, inicia el servidor en esta carpeta: <code>npm start</code> y abre <strong>http://localhost:3000</strong>.</p>';
+    }
+  })();
+</script>
 
 </body>
 </html>
