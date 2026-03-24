@@ -2,36 +2,121 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Coro Mayores</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    body { font-family: Arial; background:#f4f6f8; padding:20px; }
-    .container { max-width:800px; margin:auto; }
-    h1 { margin-bottom: 20px; }
+    :root {
+      --color-white: #ffffff;
+      --color-celeste-50: #f0f9ff;
+      --color-celeste-100: #e0f2fe;
+      --color-celeste-200: #bae6fd;
+      --color-blue-400: #38bdf8;
+      --color-blue-600: #0284c7;
+      --color-blue-800: #075985;
+      --color-blue-950: #0c2d4a;
+      --text-body: #164e63;
+      --text-heading: #0c4a6e;
+      --shadow-card: 0 8px 28px rgba(7, 89, 133, 0.08), 0 2px 8px rgba(7, 89, 133, 0.06);
+      --radius-lg: 16px;
+      --radius-md: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Source Sans 3", system-ui, -apple-system, "Segoe UI", sans-serif;
+      font-size: 1.0625rem;
+      line-height: 1.55;
+      color: var(--text-body);
+      background:
+        radial-gradient(1200px 600px at 10% -10%, var(--color-celeste-100) 0%, transparent 55%),
+        radial-gradient(900px 500px at 100% 0%, var(--color-celeste-200) 0%, transparent 50%),
+        linear-gradient(175deg, var(--color-white) 0%, var(--color-celeste-50) 42%, var(--color-celeste-100) 100%);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 42rem;
+      margin: 0 auto;
+      padding: 2rem 1.25rem 3rem;
+    }
+
+    .page-header {
+      margin-bottom: 2rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid rgba(56, 189, 248, 0.35);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(1.75rem, 4vw, 2.25rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text-heading);
+      line-height: 1.2;
+    }
+
     .audio-card {
-      background:white;
-      padding:15px;
-      margin-bottom:15px;
-      border-radius:10px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+      background: var(--color-white);
+      padding: 1.15rem 1.25rem 1.25rem;
+      margin-bottom: 1rem;
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(186, 230, 253, 0.9);
+      box-shadow: var(--shadow-card);
     }
+
     .audio-title {
-      margin: 0 0 8px 0;
-      font-weight: bold;
+      margin: 0 0 0.65rem 0;
+      font-weight: 600;
+      font-size: 1.05rem;
+      color: var(--color-blue-950);
     }
-    audio { width:100%; }
+
+    audio {
+      width: 100%;
+      border-radius: var(--radius-md);
+      vertical-align: middle;
+    }
+
     .hint {
-      background:#fff3cd;
-      border:1px solid #ffeeba;
-      padding:12px 15px;
-      border-radius:10px;
-      margin-bottom:20px;
+      background: linear-gradient(135deg, var(--color-celeste-50) 0%, var(--color-celeste-100) 100%);
+      border: 1px solid var(--color-celeste-200);
+      color: var(--color-blue-800);
+      padding: 1rem 1.15rem;
+      border-radius: var(--radius-md);
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+
+    .hint code {
+      font-family: ui-monospace, "Cascadia Mono", "Segoe UI Mono", monospace;
+      font-size: 0.9em;
+      background: rgba(255, 255, 255, 0.75);
+      padding: 0.12em 0.45em;
+      border-radius: 6px;
+      border: 1px solid var(--color-celeste-200);
+      color: var(--color-blue-950);
+    }
+
+    .hint strong {
+      color: var(--text-heading);
+      font-weight: 600;
     }
   </style>
 </head>
 <body>
 
 <div class="container">
-  <h1>Coro Mayores</h1>
+  <header class="page-header">
+    <h1>Coro Mayores</h1>
+  </header>
   <div id="audio-list"></div>
 </div>
 
