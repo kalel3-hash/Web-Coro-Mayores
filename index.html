@@ -61,6 +61,8 @@
 
       const audio = document.createElement("audio");
       audio.controls = true;
+      audio.setAttribute("controlsList", "nodownload");
+      audio.oncontextmenu = () => false;
 
       const source = document.createElement("source");
       source.src = prefix + encodeURIComponent(fileName);
