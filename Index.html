@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Biblioteca de Audios</title>
+  <style>
+    body { font-family: Arial; background:#f4f6f8; padding:20px; }
+    .container { max-width:800px; margin:auto; }
+    .audio-card {
+      background:white;
+      padding:15px;
+      margin-bottom:15px;
+      border-radius:10px;
+    }
+    audio { width:100%; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Biblioteca de Audios</h1>
+
+  <div class="audio-card">
+    <p>Audio 1</p>
+    <audio controls controlsList="nodownload" oncontextmenu="return false;">
+      <source src="audios/audio1.mp3" type="audio/mpeg">
+    </audio>
+  </div>
+
+</div>
+
+</body>
+</html>
