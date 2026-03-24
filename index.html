@@ -38,7 +38,19 @@
 <script>
   const audioList = document.getElementById("audio-list");
 
-  function renderList(audioFiles) {
+  function pageBaseHref() {
+    const { origin, pathname } = window.location;
+    let dir = pathname;
+    if (!dir.endsWith("/")) {
+      dir = dir.endsWith(".html")
+        ? dir.slice(0, dir.lastIndexOf("/") + 1)
+        : dir + "/";
+    }
+    return origin + dir;
+  }
+
+  function renderList(audioFiles, baseHref) {
+    const prefix = baseHref + "audios/";
     audioFiles.forEach((fileName) => {
       const card = document.createElement("div");
       card.className = "audio-card";
@@ -51,7 +63,7 @@
       audio.controls = true;
 
       const source = document.createElement("source");
-      source.src = `audios/${encodeURIComponent(fileName)}`;
+      source.src = prefix + encodeURIComponent(fileName);
       source.type = "audio/mpeg";
 
       audio.appendChild(source);
@@ -61,22 +73,34 @@
     });
   }
 
-  (async function loadAudios() {
+  async function fetchJson(url) {
     try {
-      const res = await fetch("/api/audios");
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const res = await fetch(url);
+      if (!res.ok) return null;
       const data = await res.json();
-      if (!Array.isArray(data)) throw new Error("Respuesta inválida");
-      if (data.length === 0) {
-        audioList.innerHTML =
-          '<p class="hint">No hay archivos .mp3 en la carpeta <strong>audios</strong>.</p>';
-        return;
-      }
-      renderList(data);
+      return Array.isArray(data) ? data : null;
     } catch {
-      audioList.innerHTML =
-        '<p class="hint">Para ver la lista automática de audios, inicia el servidor en esta carpeta: <code>npm start</code> y abre <strong>http://localhost:3000</strong>.</p>';
+      return null;
     }
+  }
+
+  (async function loadAudios() {
+    const base = pageBaseHref();
+    let files = await fetchJson("/api/audios");
+    if (!files || files.length === 0) {
+      files = await fetchJson(new URL("audios/manifest.json", base));
+    }
+    if (files && files.length > 0) {
+      renderList(files, base);
+      return;
+    }
+    if (files && files.length === 0) {
+      audioList.innerHTML =
+        '<p class="hint">No hay archivos .mp3 en la carpeta <strong>audios</strong>.</p>';
+      return;
+    }
+    audioList.innerHTML =
+      '<p class="hint">No se pudo cargar la lista. En local usa <code>npm start</code>. En GitHub Pages, ejecuta <code>npm run manifest</code> y sube <strong>audios/manifest.json</strong>.</p>';
   })();
 </script>
 

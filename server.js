@@ -80,7 +80,14 @@ const server = http.createServer((req, res) => {
         res.end();
         return;
       }
-      res.writeHead(200, { "Content-Type": "audio/mpeg" });
+      const ext = path.extname(full).toLowerCase();
+      const contentType =
+        ext === ".mp3"
+          ? "audio/mpeg"
+          : ext === ".json"
+            ? "application/json; charset=utf-8"
+            : "application/octet-stream";
+      res.writeHead(200, { "Content-Type": contentType });
       fs.createReadStream(full).pipe(res);
     });
     return;
